@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration debug="false">
+	<!-- 日志文件路径 -->
+	<property name="LOG_URL" value="/home/ybreathing/nakri/logs" />
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>%date [%2thread] %-5level %logger{35} - %msg %n</Pattern>
+		</encoder>
+	</appender>
+
+	<!-- 每天生成一个新的日志文件 -->
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<Encoding>UTF-8</Encoding>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!--日志文件输出的文件名 -->
+			<FileNamePattern>${LOG_URL}/nakri_%d{yyyy-MM-dd}_log</FileNamePattern>
+			<MaxHistory>30</MaxHistory>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+			<pattern>%d{MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+		</layout>
+		<!--日志文件最大的大小 -->
+		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>10MB</MaxFileSize>
+		</triggeringPolicy>
+		<!-- 不打印错误日志 -->
+		<!-- <filter class="ch.qos.logback.classic.filter.LevelFilter"> 
+			<level>ERROR</level> 
+			<onMatch>DENY</onMatch>
+			<onMismatch>ACCEPT</onMismatch>
+		</filter> -->
+	</appender>
+
+	<!-- 打印错误日志 -->
+	<appender name="errorAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<Encoding>UTF-8</Encoding>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_URL}/error_nakri_%d{yyyy-MM-dd}_log</fileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} %thread %X{invokeNo} %logger{40} %msg%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter"><!-- 只打印错误日志 -->
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+	</appender>
+
+	<logger name="org.apache.commons" level="ERROR"></logger>
+
+	<logger name="org.springframework" level="INFO"></logger>
+
+	<logger name="ch.qos.logback" level="ERROR"></logger>
+	<logger name="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" level="ERROR"></logger>
+	<logger name="org.springframework.beans.factory.xml.XmlBeanDefinitionReader" level="ERROR"></logger>
+	<logger name="org.springframework.web.context.support.XmlWebApplicationContext" level="ERROR"></logger>
+
+	<logger name="org.springframework.security.config.http.FilterInvocationSecurityMetadataSourceParser" level="ERROR"></logger>
+
+	<logger name="com.primecocn.nakri" level="DEBUG"></logger>
+
+	<logger name="org.jbpm" level="info" />
+	<logger name="bitronix.tm" level="error" />
+	<logger name="org.hibernate" level="info" />
+
+	<root level="DEBUG">
+		<!-- 输出到文件 -->
+		<appender-ref ref="FILE" />
+		<!-- 输出到文件 -->
+		<appender-ref ref="errorAppender" />
+		<!-- 输出到控制台 -->
+		<appender-ref ref="STDOUT" />
+	</root>
+</configuration>

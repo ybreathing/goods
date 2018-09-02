@@ -1,0 +1,69 @@
+.x-accordion-title{
+    padding: 8px 10px;
+	margin-top:2px;
+	font-weight:bold;
+	font-size:14px;
+	background:#FFF;
+	color:#1e9ad6;
+	border:1px solid #d5d5d5;
+	border-left:3px solid #1e9ad6;
+	border-radius:3px;
+}
+.x-collapsed .x-accordion-body{
+    height: 0;
+    overflow: hidden;
+}
+.x-collapsed .x-accordion-title{
+	font-size:12px;
+	font-weight:normal;
+	background: #efefef;
+	color:#555;
+	border:1px solid #d5d5d5;
+}
+
+#Content{
+    overflow:auto;
+    margin-top:5px;
+    background:#FFF;
+}
+
+#Content-Left{
+    overflow:hidden;
+    width: 16%;
+    padding:8px 12px;
+    float:right;
+    background:#FFF;
+	box-sizing:border-box;
+}
+
+#Content-Main{
+    overflow:hidden;
+    width: 80%;
+    margin:5px;
+    float:left;
+    background:#FFF;
+}
+
+.menu-Main{
+	overflow:hidden;
+	float:left;
+	width: 100%;
+}
+
+.menu-Left{
+	overflow:hidden;
+	float:left;
+	text-align:left;
+	width: 80%;
+}
+
+.menu-Right{
+	overflow:hidden;
+	float:right;
+	text-align:right;
+	width: 20px;
+}
+
+.yes-hidden{
+	display:none;
+}

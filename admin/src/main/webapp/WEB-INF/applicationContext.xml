@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xmlns:jee="http://www.springframework.org/schema/jee"
+        xmlns:task="http://www.springframework.org/schema/task" xmlns:aop="http://www.springframework.org/schema/aop"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context.xsd
+         http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+         http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task-3.1.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+<!-- 启动 @AspectJ 支持 -->
+    <aop:aspectj-autoproxy/>
+
+    <!-- 自动扫描所有注解 注册为bean (启动注解) -->
+    <context:component-scan base-package="com.ybreathing.goods.*" >
+        <!-- <context:include-filter type="annotation" expression="org.aspectj.lang.annotation.Aspect"/> -->
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+    </context:component-scan>
+
+
+    <!-- 读取properties文件 -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:**/config.properties</value>
+                <value>classpath:config.properties</value>
+            </list>
+        </property>
+    </bean>
+
+
+    <!--DataSource -->
+    <jee:jndi-lookup id="dataSource" jndi-name="jdbc/goods"/>
+
+    <!--Dao -->
+    <bean id="springDaoRunner" class="com.ybreathing.goods.utils.SpringDaoRunner"></bean>
+    <bean id="dao" class="org.nutz.dao.impl.NutDao">
+        <property name="dataSource" ref="dataSource" />
+        <property name="runner" ref="springDaoRunner"></property>
+    </bean>
+
+    <!-- NutzDao有自己的事务处理框架，要使用Spring的事务框架这样处理 -->
+    <!-- <bean id="sqlnutzdao" class="com.gmcc.bi.dao.nutz.SqlNutzDao">
+            <property name="dataSource" ref="dataSource"/>
+            </bean> -->
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <tx:annotation-driven transaction-manager="transactionManager" />
+
+
+    <!-- 异常处理方式 -->
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <!-- 定义默认的异常处理页面，当该异常类型的注册时使用 -->
+        <property name="defaultErrorView" value="error"></property>
+        <!-- 定义异常处理页面用来获取异常信息的变量名，默认名为exception -->
+        <property name="exceptionAttribute" value="ex"></property>
+
+        <!-- 相关状态码对应的错误页面 -->
+        <property name="statusCodes">
+            <props>
+                <prop key="errors/500">500</prop>
+                <prop key="errors/404">404</prop>
+            </props>
+        </property>
+        <!-- 设置日志输出级别，不定义则默认不输出警告等错误日志信息 -->
+        <property name="warnLogCategory" value="WARN" />
+        <!-- 默认HTTP状态码 -->
+        <property name="defaultStatusCode" value="500" />
+    </bean>
+
+
+
+
+</beans>

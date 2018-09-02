@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:p="http://www.springframework.org/schema/p"
+  xsi:schemaLocation="
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		">
+  <!-- ========================== WEB DEFINITIONS ======================= -->
+  <context:component-scan base-package="com.ybreathing.goods.*">
+  	<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" /> 
+    <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" /> 
+  </context:component-scan>
+  <!--<context:annotation-config />-->
+  <mvc:annotation-driven />
+  <!-- General resources -->
+  <!--<mvc:resources mapping="/resources/**" location="/WEB-INF/resources/" />-->
+  <!--<mvc:resources mapping="/view/**" location="/WEB-INF/view/" />-->
+  
+  <!-- 完成请求和注解POJO的映射 -->
+  <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+  </bean>
+  <!-- 视图解释类 -->
+  <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+    <property name="prefix" value="/WEB-INF/content/" />
+    <property name="suffix" value=".jsp" /><!--可为空,方便实现自已的依据扩展名来选择视图解释类的逻辑 -->
+  </bean>
+  <!-- 拦截器 -->
+  <!-- <mvc:interceptors> <bean class="com.primecocn.nakri.web.MenuInterceptor" /> </mvc:interceptors> -->
+  <!-- 对静态资源文件的访问 -->
+  <mvc:default-servlet-handler />
+
+  <!--<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">-->
+    <!--<property name="basenames">-->
+      <!--<list>-->
+        <!--<value>WEB-INF/locals/messages</value>-->
+        <!--<value>WEB-INF/locals/common</value>-->
+        <!--<value>classpath:org/springframework/security/messages</value>-->
+      <!--</list>-->
+    <!--</property>-->
+  <!--</bean>-->
+
+  <!-- 文件上传 -->
+  <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    <!-- 设置上传文件的编码 -->
+    <property name="defaultEncoding" value="utf-8" />
+    <!-- 设置上传文件的最大值 -->
+    <property name="maxUploadSize" value="1048567000" />
+    <!-- 文件上传时允许写到内存中的最大值 -->
+    <property name="maxInMemorySize" value="10485670" />
+  </bean>
+  
+</beans>
