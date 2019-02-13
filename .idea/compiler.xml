@@ -12,5 +12,12 @@
         <module name="wechat" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="admin" target="1.5" />
+      <module name="common" target="1.5" />
+      <module name="db" target="1.5" />
+      <module name="wechat" target="1.5" />
+      <module name="ybreathGoods" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
 </project>
